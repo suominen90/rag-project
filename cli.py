@@ -84,7 +84,7 @@ def query_rag(file_path, output):
             query_cleaned = line.strip().strip('\n')
             response = query(query_cleaned)
             if response:
-                output.write(json.dumps({"query": query_cleaned, "message": response}) + '\n')
+                output.write(json.dumps({"query": query_cleaned, "generated_answer": response['generated_answer'], 'context': response['context']}) + '\n')
             logging.exception(response)
 
 

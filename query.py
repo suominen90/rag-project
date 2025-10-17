@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 from mistralai import Mistral
 from get_vector_database import get_vector_db
@@ -44,6 +45,6 @@ def query(input):
         """
 
         response = run_mistral(client, PROMPT)
-        return response
+        return {"generated_answer": response, "context": context}
 
     return None
