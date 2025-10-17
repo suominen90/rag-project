@@ -76,7 +76,8 @@ def load_and_split_data(
     Returns:
         list: A list of document chunks ready for embedding.
     """
-    chunk_size = chunk_size or int(CHUNK_SIZE) # TODO why does it become a string?
+    # Environment variables are strings; need to cast as int
+    chunk_size = chunk_size or int(CHUNK_SIZE)
     chunk_overlap = chunk_overlap or int(CHUNK_OVERLAP)
 
     loader = loader_class(file_path=file_path)
