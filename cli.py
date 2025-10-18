@@ -22,35 +22,36 @@ def cli():
     pass
 
 @cli.command("add")
-@click.argument("file_path", type=click.Path(exists=True, readable=True))
-def add_file(file_path):
+@click.argument("file_paths", type=click.Path(exists=True, readable=True), nargs=-1)
+def add_file(file_paths):
     """
     Add a PDF file to the vector database.
 
     Example:
         python cli.py add ./data/myfile.pdf
     """
-    file_path = Path(file_path)
-    if not file_path.suffix.lower().endswith(".pdf"):
-        click.echo("Only PDF files are supported.")
-        return
+    for p in file_paths:
+        file_path = Path(p)
+        if not file_path.suffix.lower().endswith(".pdf"):
+            click.echo("Only PDF files are supported.")
+            return
+    
+        class DummyFile:
+            """A lightweight wrapper to simulate a file-like object for embed()."""
+            def __init__(self, path):
+                self.filename = path.name
+                self.path = path
+            def save(self, dest):
+                os.system(f"cp '{self.path}' '{dest}'")
 
-    class DummyFile:
-        """A lightweight wrapper to simulate a file-like object for embed()."""
-        def __init__(self, path):
-            self.filename = path.name
-            self.path = path
-        def save(self, dest):
-            os.system(f"cp '{self.path}' '{dest}'")
+        dummy_file = DummyFile(file_path)
+        click.echo(f"Embedding file: {file_path.name} ...")
 
-    dummy_file = DummyFile(file_path)
-    click.echo(f"Embedding file: {file_path.name} ...")
-
-    success = embed(dummy_file)
-    if success:
-        click.echo("File embedded successfully.")
-    else:
-        click.echo("Embedding failed.")
+        success = embed(dummy_file)
+        if success:
+            click.echo("File embedded successfully.")
+        else:
+            click.echo("Embedding failed.")
 
 
 @cli.command("delete")
