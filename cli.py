@@ -65,7 +65,7 @@ def count_collection():
 
     #size = db.count()
     click.echo(f"Size of db: {len(db.get()["ids"])} chunks")
-    click.echo(f"Documents: {list(db.get()["documents"])}")
+    #click.echo(f"Documents: {list(db.get()["documents"])}")
 
 
 @cli.command("delete")
