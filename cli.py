@@ -53,6 +53,20 @@ def add_file(file_paths):
         else:
             click.echo("Embedding failed.")
 
+@cli.command("count")
+def count_collection():
+    """
+    Count instances of a collection from the vector database.
+
+    Example:
+        python cli.py count
+    """
+    db = get_vector_db()
+
+    #size = db.count()
+    click.echo(f"Size of db: {len(db.get()["ids"])} chunks")
+    click.echo(f"Documents: {list(db.get()["documents"])}")
+
 
 @cli.command("delete")
 def delete_collection():
